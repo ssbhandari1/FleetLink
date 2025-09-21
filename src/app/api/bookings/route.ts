@@ -57,7 +57,6 @@ export async function POST(request: NextRequest) {
     
     return NextResponse.json(booking, { status: 201 });
   } catch (error) {
-    console.error('Error creating booking:', error);
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

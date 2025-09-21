@@ -1,12 +1,11 @@
 import mongoose, { Schema, Document, Model } from "mongoose";
 
 export interface IBooking extends Document {
-  vehicleId: mongoose.Types.ObjectId; // reference to Vehicle
+  vehicleId: mongoose.Types.ObjectId;
   fromPincode: string;
   toPincode: string;
   startTime: Date;
   endTime: Date;
-  customerId: string;
 }
 
 const bookingSchema = new Schema<IBooking>(
@@ -31,11 +30,7 @@ const bookingSchema = new Schema<IBooking>(
     endTime: {
       type: Date,
       required: true,
-    },
-    customerId: {
-      type: String,
-      required: true,
-    },
+    }
   },
   { timestamps: true }
 );
