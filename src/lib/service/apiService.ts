@@ -58,7 +58,7 @@ export const vehicleAPI = {
     vehicleId?: string;
     fromPincode: string;
     toPincode: string;
-    startTime: string | any;
+    startTime: string;
   }) => {
     const response = await api.post('/bookings', bookingData);
     return response.data;

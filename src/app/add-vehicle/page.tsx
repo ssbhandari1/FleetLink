@@ -41,6 +41,7 @@ export default function Book() {
         } catch (error) {
             setMessage('Error adding vehicle');
             setIsError(true);
+            throw new Error("Error adding vehicle" + error);
         } finally {
             setIsLoading(false);
         }
@@ -55,7 +56,7 @@ export default function Book() {
                 setVehicles(res)
                 console.log("fetchVehicle", res)
             } catch (error) {
-                console.log(error)
+                throw new Error("Error fetching all vehicles: " + error);
 
             }
         }

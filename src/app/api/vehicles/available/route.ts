@@ -7,15 +7,13 @@ import { calculateRideDuration, calculateEndTime } from '@/lib/utils';
 export async function GET(request: NextRequest) {
   try {
     await dbConnect();
-    console.log('availble111',request.url)
     const { searchParams } = new URL(request.url);
     const capacityRequired = Number(searchParams.get('capacityRequired'));
     const fromPincode = searchParams.get('fromPincode');
     const toPincode = searchParams.get('toPincode');
     const startTimeStr = searchParams.get('startTime');
-    console.log('availble2222',searchParams)
     
-    // Validation
+
     if (!capacityRequired || !fromPincode || !toPincode || !startTimeStr) {
       return NextResponse.json(
         { error: 'Missing required parameters' },
@@ -38,7 +36,6 @@ export async function GET(request: NextRequest) {
     const capableVehicles = await Vehicle.find({
       capacityKg: { $gte: capacityRequired }
     });
-    console.log('capableVehicles11',capableVehicles)
     const availableVehicles = [];
     
     for (const vehicle of capableVehicles) {
@@ -51,7 +48,6 @@ export async function GET(request: NextRequest) {
           }
         ]
       });
-      console.log('overlappingBooking11',overlappingBooking)
       if (!overlappingBooking) {
         availableVehicles.push({
           ...vehicle.toObject(),
@@ -59,7 +55,6 @@ export async function GET(request: NextRequest) {
         });
       }
     }
-    console.log('availableVehicles211',availableVehicles)
     return NextResponse.json(availableVehicles);
   } catch (error) {
     console.error('Error fetching available vehicles:', error);

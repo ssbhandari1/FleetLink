@@ -1,24 +1,20 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Document, Model } from "mongoose";
 
-const VehicleSchema = new Schema({
-  name: {
-    type: String,
-    required: true,
-  },
-  capacityKg: {
-    type: Number,
-    required: true,
-  },
-  tyres: {
-    type: Number,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: true,
-  }
+export interface IVehicle extends Document {
+  name: string;
+  description: string;
+  capacityKg: number;
+  tyres: number;
+}
+
+const vehicleSchema = new Schema<IVehicle>({
+  name: { type: String, required: true },
+  description: { type: String, required: true },
+  capacityKg: { type: Number, required: true },
+  tyres: { type: Number, required: true },
 });
 
-const Vehicle = mongoose.models.Vehicle || mongoose.model('Vehicle', VehicleSchema);
+const Vehicle: Model<IVehicle> =
+  mongoose.models.Vehicle || mongoose.model<IVehicle>("Vehicle", vehicleSchema);
 
 export default Vehicle;

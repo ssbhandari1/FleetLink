@@ -22,7 +22,6 @@ export default function Book() {
     const [bookingInProgress, setBookingInProgress] = useState<string | null>(null);
     const [message, setMessage] = useState('');
     const [isError, setIsError] = useState(false);
-    const [issearchData, setIssearchData] = useState(false)
     const [estimatedDuration, setEstimatedDuration] = useState<number | undefined>();
     const [searchCriteria, setSearchCriteria] = useState<SearchDataType>()
 
@@ -56,7 +55,6 @@ export default function Book() {
 
             setVehicles(availableVehicles);
             setSearchCriteria(searchData)
-            setIssearchData(true)
 
             if (availableVehicles.length > 0) {
                 setEstimatedDuration(availableVehicles[0].estimatedRideDurationHours);
@@ -68,11 +66,12 @@ export default function Book() {
                 ? 'No vehicles available for your criteria'
                 : `Found ${availableVehicles.length} vehicles`);
             setIsError(false);
-        } catch (error: any) {
-            setMessage(error.message || 'Error searching vehicles');
+        } catch (error: unknown) {
+            setMessage('Error searching vehicles');
             setIsError(true);
             setVehicles([]);
             setEstimatedDuration(undefined);
+            throw new Error("Error searching vehicles" + error);
         } finally {
             setIsLoading(false);
         }
@@ -93,13 +92,13 @@ export default function Book() {
                 startTime: new Date(searchCriteria?.startTime).toISOString(),
             };
 
-            const booking = await vehicleAPI.bookVehicle(bookingData as any);
+            const booking = await vehicleAPI.bookVehicle(bookingData);
 
             const vehicle = vehicles.find(v => v._id === vehicleId);
             setMessage(`Successfully booked ${vehicle?.name}! Booking ID: ${booking._id}`);
             setIsError(false);
             setVehicles([]);
-        } catch (error: any) {
+        } catch (error) {
             if (error.response?.status === 409) {
                 setMessage('Vehicle is no longer available. Please search again.');
             } else {
